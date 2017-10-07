@@ -21,8 +21,8 @@ public class ParkingSpace {
 
     public String createParking(Integer parkingSize) {
 
-        for(int id = 1; id <= parkingSize; id++) {
-            ParkingSlot slot = new ParkingSlot(id,true);
+        for (int id = 1; id <= parkingSize; id++) {
+            ParkingSlot slot = new ParkingSlot(id, true);
             idToSlotMap.put(id, slot);
             slotQueue.add(id);
         }

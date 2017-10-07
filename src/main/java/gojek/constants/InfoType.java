@@ -6,8 +6,9 @@ package gojek.constants;
 public enum InfoType {
 
     STATUS(1, "Status of Parking Lot"),
-    CARS_WITH_COLOR(2, "All cars with Color"),
-    PARKING_SLOT_OF_CAR(3, "Parking Lot for a car");
+    REG_NUM_OF_CARS_WITH_COLOR(2, "All cars with Color"),
+    PARKING_SLOT_OF_CARS_WITH_COLOR(3, "All cars with Color"),
+    PARKING_SLOT_OF_CAR(4, "Parking Lot for a car");
 
     private Integer code;
     private String description;

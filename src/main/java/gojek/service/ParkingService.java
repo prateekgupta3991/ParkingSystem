@@ -1,5 +1,7 @@
 package gojek.service;
 
+import gojek.constants.InfoType;
+
 /**
  * Created by prateekgupta on 07/10/17.
  */
@@ -13,7 +15,7 @@ public interface ParkingService {
 
     String status();
 
-    String getCarsWithColor(String color);
+    String getCarsRegNumOrSlotWithColor(InfoType infoType, String color);
 
-    String getSlotForCar(String regNum);
+    String getSlotForCarWithRegNum(String regNum);
 }

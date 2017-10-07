@@ -17,9 +17,9 @@ public class ParkingServiceImpl implements ParkingService {
 
     private ParkingTicket parkingTicket;
 
-    public ParkingServiceImpl(ParkingSpace parkingSpace, ParkingTicket parkingTicket) {
-        this.parkingSpace = parkingSpace;
-        this.parkingTicket = parkingTicket;
+    public ParkingServiceImpl() {
+        this.parkingSpace = new ParkingSpace();
+        this.parkingTicket = new ParkingTicket();
     }
 
     @Override
@@ -30,10 +30,11 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public String issueTicket(String regNum, String color) {
 
-        if(parkingSpace.getLeastSlotFromQueue() == null)
+        if (parkingSpace.getSlotQueue().size() < 1)
             return "Sorry, parking lot is full";
         Vehicle vehicle = new Vehicle(regNum, color);
         ParkingSlot availableParkingSlot = parkingSpace.getIdToSlotMap().get(parkingSpace.getLeastSlotFromQueue());
+        availableParkingSlot.setVacant(false);
         parkingTicket.getParkingSlotVehicleMap().put(availableParkingSlot, vehicle);
 
         return "Allocated slot number: " + availableParkingSlot.getSlotId();
@@ -44,10 +45,9 @@ public class ParkingServiceImpl implements ParkingService {
 
         ParkingSlot parkingSlot = parkingSpace.getIdToSlotMap().get(slotId);
         Boolean isSlotEmpty = parkingTicket.removeVehicleFromParking(parkingSlot);
-        if(isSlotEmpty == false) {
+        if (isSlotEmpty == false) {
             return "Slot was already empty";
         }
-        parkingSpace.getIdToSlotMap().remove(slotId);
         parkingSpace.addSlotToQueue(slotId);
 
         return "Slot number " + slotId + " is free";
@@ -61,14 +61,14 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public String getCarsWithColor(String color) {
+    public String getCarsRegNumOrSlotWithColor(InfoType infoType, String color) {
 
-        String cars = getParkingDetails(InfoType.STATUS, color);
+        String cars = getParkingDetails(infoType, color);
         return cars;
     }
 
     @Override
-    public String getSlotForCar(String regNum) {
+    public String getSlotForCarWithRegNum(String regNum) {
 
         String slots = getParkingDetails(InfoType.PARKING_SLOT_OF_CAR, regNum);
         return slots;
@@ -77,30 +77,35 @@ public class ParkingServiceImpl implements ParkingService {
     private String getParkingDetails(InfoType infoType, String miscInfo) {
 
         Map<ParkingSlot, Vehicle> parkingSlotVehicleMap = parkingTicket.getParkingSlotVehicleMap();
-        if(parkingSlotVehicleMap.size() == 0 )
+        if (parkingSlotVehicleMap.size() == 0)
             return "Not found";
 
         StringBuilder status = new StringBuilder();
 
-        if(infoType == InfoType.STATUS) {
+        if (infoType == InfoType.STATUS) {
             status.append("Slot No.\tRegistration No\tColour\n");
         }
 
         for (Map.Entry<Integer, ParkingSlot> vehicleParkingSlotEntry : parkingSpace.getIdToSlotMap().entrySet()) {
-            if (parkingSlotVehicleMap.containsKey(vehicleParkingSlotEntry) == true) {
-                if(infoType == InfoType.STATUS) {
-                    Vehicle vehicle = parkingSlotVehicleMap.get(vehicleParkingSlotEntry);
-                    status.append(vehicleParkingSlotEntry.getKey() + "\t" + vehicle.getRegistrationNumber() + "\t" + vehicle.getColor() + "\n");
+            if (parkingSlotVehicleMap.containsKey(vehicleParkingSlotEntry.getValue()) == true) {
+                if (infoType == InfoType.STATUS) {
+                    Vehicle vehicle = parkingSlotVehicleMap.get(vehicleParkingSlotEntry.getValue());
+                    status.append(vehicleParkingSlotEntry.getKey() + "\t" + vehicle.getRegistrationNumber() + "\t" + vehicle.getColor() + " \n");
 
-                } else if(infoType == InfoType.CARS_WITH_COLOR) {
-                    if(parkingSlotVehicleMap.get(vehicleParkingSlotEntry).getColor().equalsIgnoreCase(miscInfo)) {
-                        Vehicle vehicle = parkingSlotVehicleMap.get(vehicleParkingSlotEntry);
-                        status.append(vehicle.getRegistrationNumber()+",");
+                } else if (infoType == InfoType.REG_NUM_OF_CARS_WITH_COLOR || infoType == InfoType.PARKING_SLOT_OF_CARS_WITH_COLOR) {
+                    if (parkingSlotVehicleMap.get(vehicleParkingSlotEntry.getValue()).getColor().equalsIgnoreCase(miscInfo)) {
+                        if (infoType == InfoType.REG_NUM_OF_CARS_WITH_COLOR) {
+                            Vehicle vehicle = parkingSlotVehicleMap.get(vehicleParkingSlotEntry.getValue());
+                            status.append(vehicle.getRegistrationNumber() + ", ");
+                        } else {
+                            status.append(vehicleParkingSlotEntry.getKey() + ", ");
+                        }
                     }
 
-                } else if(infoType == InfoType.PARKING_SLOT_OF_CAR) {
-                    if(parkingSlotVehicleMap.get(vehicleParkingSlotEntry).getRegistrationNumber().equalsIgnoreCase(miscInfo)) {
-                        status.append(vehicleParkingSlotEntry.getKey()+",");
+                } else if (infoType == InfoType.PARKING_SLOT_OF_CAR) {
+                    if (parkingSlotVehicleMap.get(vehicleParkingSlotEntry.getValue()).getRegistrationNumber().equalsIgnoreCase(miscInfo) ||
+                            parkingSlotVehicleMap.get(vehicleParkingSlotEntry.getValue()).getColor().equalsIgnoreCase(miscInfo)) {
+                        status.append(vehicleParkingSlotEntry.getKey() + ", ");
                         break;
                     }
                 }
@@ -108,8 +113,8 @@ public class ParkingServiceImpl implements ParkingService {
         }
 
         String response = "Not found";
-        if(status.length() > 0)
-            response = status.substring(0, status.length() - 1);
+        if (status.length() > 0)
+            response = status.substring(0, status.length() - 2);
 
         return response;
     }

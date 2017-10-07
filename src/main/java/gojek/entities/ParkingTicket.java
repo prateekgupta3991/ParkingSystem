@@ -35,7 +35,7 @@ public class ParkingTicket {
 
     public Boolean removeVehicleFromParking(ParkingSlot slotId) {
 
-        if(!parkingSlotVehicleMap.containsKey(slotId))
+        if (!parkingSlotVehicleMap.containsKey(slotId))
             return false;
         parkingSlotVehicleMap.remove(slotId);
         return true;
