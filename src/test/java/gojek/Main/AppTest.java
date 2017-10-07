@@ -1,4 +1,4 @@
-package gojek;
+package gojek.Main;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

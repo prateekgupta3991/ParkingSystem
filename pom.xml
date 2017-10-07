@@ -31,7 +31,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>gojek.App</mainClass>
+                            <mainClass>gojek.Main.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,4 +1,4 @@
-package gojek;
+package gojek.Main;
 
 /**
  * Hello world!
