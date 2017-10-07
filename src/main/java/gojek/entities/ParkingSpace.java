@@ -1,7 +1,6 @@
 package gojek.entities;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by prateekgupta on 07/10/17.
@@ -9,21 +8,25 @@ import java.util.Map;
 public class ParkingSpace {
 
     private Map<Integer, ParkingSlot> idToSlotMap;
+    private PriorityQueue<Integer> slotQueue;
 
     public ParkingSpace() {
         idToSlotMap = new HashMap<>();
+        slotQueue = new PriorityQueue<>();
     }
 
     public ParkingSpace(Map<Integer, ParkingSlot> idToSlotMap) {
         this.idToSlotMap = idToSlotMap;
     }
 
-    public void createParking(Integer parkingSize) {
+    public String createParking(Integer parkingSize) {
 
-        for(int id = 0; id < parkingSize; id++) {
+        for(int id = 1; id <= parkingSize; id++) {
             ParkingSlot slot = new ParkingSlot(id,true);
             idToSlotMap.put(id, slot);
+            slotQueue.add(id);
         }
+        return "Created a parking lot with " + parkingSize + " slots";
     }
 
     public Map<Integer, ParkingSlot> getIdToSlotMap() {
@@ -32,6 +35,22 @@ public class ParkingSpace {
 
     public void setIdToSlotMap(Map<Integer, ParkingSlot> idToSlotMap) {
         this.idToSlotMap = idToSlotMap;
+    }
+
+    public PriorityQueue<Integer> getSlotQueue() {
+        return slotQueue;
+    }
+
+    public void setSlotQueue(PriorityQueue<Integer> slotQueue) {
+        this.slotQueue = slotQueue;
+    }
+
+    public Integer getLeastSlotFromQueue() {
+        return slotQueue.remove();
+    }
+
+    public void addSlotToQueue(Integer slotId) {
+        slotQueue.add(slotId);
     }
 
     @Override

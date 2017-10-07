@@ -7,7 +7,6 @@ public class Vehicle {
 
     private String registrationNumber;
     private String color;
-    private Integer parkingSlot;
 
     public Vehicle() {
     }
@@ -15,12 +14,6 @@ public class Vehicle {
     public Vehicle(String registrationNumber, String color) {
         this.registrationNumber = registrationNumber;
         this.color = color;
-    }
-
-    public Vehicle(String registrationNumber, String color, Integer parkingSlot) {
-        this.registrationNumber = registrationNumber;
-        this.color = color;
-        this.parkingSlot = parkingSlot;
     }
 
     public String getRegistrationNumber() {
@@ -39,20 +32,11 @@ public class Vehicle {
         this.color = color;
     }
 
-    public Integer getParkingSlot() {
-        return parkingSlot;
-    }
-
-    public void setParkingSlot(Integer parkingSlot) {
-        this.parkingSlot = parkingSlot;
-    }
-
     @Override
     public String toString() {
         return "Vehicle{" +
                 "registrationNumber='" + registrationNumber + '\'' +
                 ", color='" + color + '\'' +
-                ", parkingSlot=" + parkingSlot +
                 '}';
     }
 }
