@@ -12,4 +12,8 @@ public interface ParkingService {
     String leaveParking(Integer slotId);
 
     String status();
+
+    String getCarsWithColor(String color);
+
+    String getSlotForCar(String regNum);
 }

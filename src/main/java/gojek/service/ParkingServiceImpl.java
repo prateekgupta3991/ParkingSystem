@@ -1,5 +1,6 @@
 package gojek.service;
 
+import gojek.constants.InfoType;
 import gojek.entities.ParkingSlot;
 import gojek.entities.ParkingSpace;
 import gojek.entities.ParkingTicket;
@@ -55,14 +56,61 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public String status() {
 
+        String status = getParkingDetails(InfoType.STATUS, null);
+        return status;
+    }
+
+    @Override
+    public String getCarsWithColor(String color) {
+
+        String cars = getParkingDetails(InfoType.STATUS, color);
+        return cars;
+    }
+
+    @Override
+    public String getSlotForCar(String regNum) {
+
+        String slots = getParkingDetails(InfoType.PARKING_SLOT_OF_CAR, regNum);
+        return slots;
+    }
+
+    private String getParkingDetails(InfoType infoType, String miscInfo) {
+
         Map<ParkingSlot, Vehicle> parkingSlotVehicleMap = parkingTicket.getParkingSlotVehicleMap();
-        StringBuilder status = new StringBuilder("Slot No.\tRegistration No\tColour\n");
+        if(parkingSlotVehicleMap.size() == 0 )
+            return "Not found";
+
+        StringBuilder status = new StringBuilder();
+
+        if(infoType == InfoType.STATUS) {
+            status.append("Slot No.\tRegistration No\tColour\n");
+        }
+
         for (Map.Entry<Integer, ParkingSlot> vehicleParkingSlotEntry : parkingSpace.getIdToSlotMap().entrySet()) {
-            if(parkingSlotVehicleMap.containsKey(vehicleParkingSlotEntry) == true) {
-                Vehicle vehicle = parkingSlotVehicleMap.get(vehicleParkingSlotEntry);
-                status.append(vehicleParkingSlotEntry.getKey()+"\t"+vehicle.getRegistrationNumber()+"\t"+vehicle.getColor()+"\n");
+            if (parkingSlotVehicleMap.containsKey(vehicleParkingSlotEntry) == true) {
+                if(infoType == InfoType.STATUS) {
+                    Vehicle vehicle = parkingSlotVehicleMap.get(vehicleParkingSlotEntry);
+                    status.append(vehicleParkingSlotEntry.getKey() + "\t" + vehicle.getRegistrationNumber() + "\t" + vehicle.getColor() + "\n");
+
+                } else if(infoType == InfoType.CARS_WITH_COLOR) {
+                    if(parkingSlotVehicleMap.get(vehicleParkingSlotEntry).getColor().equalsIgnoreCase(miscInfo)) {
+                        Vehicle vehicle = parkingSlotVehicleMap.get(vehicleParkingSlotEntry);
+                        status.append(vehicle.getRegistrationNumber()+",");
+                    }
+
+                } else if(infoType == InfoType.PARKING_SLOT_OF_CAR) {
+                    if(parkingSlotVehicleMap.get(vehicleParkingSlotEntry).getRegistrationNumber().equalsIgnoreCase(miscInfo)) {
+                        status.append(vehicleParkingSlotEntry.getKey()+",");
+                        break;
+                    }
+                }
             }
         }
-        return status.toString();
+
+        String response = "Not found";
+        if(status.length() > 0)
+            response = status.substring(0, status.length() - 1);
+
+        return response;
     }
 }
