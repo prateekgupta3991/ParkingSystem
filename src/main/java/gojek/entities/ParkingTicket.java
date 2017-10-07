@@ -8,28 +8,36 @@ import java.util.Map;
  */
 public class ParkingTicket {
 
-    private Map<Vehicle, ParkingSlot> vehicleParkingSlotMap;
+    private Map<ParkingSlot, Vehicle> parkingSlotVehicleMap;
 
     public ParkingTicket() {
-        vehicleParkingSlotMap = new HashMap<>();
+        parkingSlotVehicleMap = new HashMap<>();
     }
 
-    public ParkingTicket(Map<Vehicle, ParkingSlot> vehicleParkingSlotMap) {
-        this.vehicleParkingSlotMap = vehicleParkingSlotMap;
+    public ParkingTicket(Map<ParkingSlot, Vehicle> parkingSlotVehicleMap) {
+        this.parkingSlotVehicleMap = parkingSlotVehicleMap;
     }
 
-    public Map<Vehicle, ParkingSlot> getVehicleParkingSlotMap() {
-        return vehicleParkingSlotMap;
+    public Map<ParkingSlot, Vehicle> getParkingSlotVehicleMap() {
+        return parkingSlotVehicleMap;
     }
 
-    public void setVehicleParkingSlotMap(Map<Vehicle, ParkingSlot> vehicleParkingSlotMap) {
-        this.vehicleParkingSlotMap = vehicleParkingSlotMap;
+    public void setParkingSlotVehicleMap(Map<ParkingSlot, Vehicle> parkingSlotVehicleMap) {
+        this.parkingSlotVehicleMap = parkingSlotVehicleMap;
     }
 
     @Override
     public String toString() {
         return "ParkingTicket{" +
-                "vehicleParkingSlotMap=" + vehicleParkingSlotMap +
+                "parkingSlotVehicleMap=" + parkingSlotVehicleMap +
                 '}';
+    }
+
+    public Boolean removeVehicleFromParking(ParkingSlot slotId) {
+
+        if(!parkingSlotVehicleMap.containsKey(slotId))
+            return false;
+        parkingSlotVehicleMap.remove(slotId);
+        return true;
     }
 }

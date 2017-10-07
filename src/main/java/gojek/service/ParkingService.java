@@ -9,4 +9,7 @@ public interface ParkingService {
 
     String issueTicket(String regNum, String color);
 
+    String leaveParking(Integer slotId);
+
+    String status();
 }

@@ -11,7 +11,7 @@ public class ParkingSpace {
     private PriorityQueue<Integer> slotQueue;
 
     public ParkingSpace() {
-        idToSlotMap = new HashMap<>();
+        idToSlotMap = new LinkedHashMap<>();
         slotQueue = new PriorityQueue<>();
     }
 
