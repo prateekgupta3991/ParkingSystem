@@ -1,0 +1,8 @@
+#!/bin/bash
+mvn clean install
+mvn package
+if [ -z $1 ] ; then
+    mvn exec:java -Dexec.mainClass=gojek.Main.App
+elif [ -n $1 ] ; then
+    mvn exec:java -Dexec.mainClass=gojek.Main.App -Dexec.args=$1
+fi
