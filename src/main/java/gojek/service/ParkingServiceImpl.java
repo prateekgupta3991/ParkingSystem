@@ -30,6 +30,10 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public String issueTicket(String regNum, String color) {
 
+        String doesParkingExists = validateParkingSpace();
+        if(doesParkingExists != null)
+            return doesParkingExists;
+
         if (parkingSpace.getSlotQueue().size() < 1)
             return "Sorry, parking lot is full";
         Vehicle vehicle = new Vehicle(regNum, color);
@@ -42,6 +46,10 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public String leaveParking(Integer slotId) {
+
+        String doesParkingExists = validateParkingSpace();
+        if(doesParkingExists != null)
+            return doesParkingExists;
 
         ParkingSlot parkingSlot = parkingSpace.getIdToSlotMap().get(slotId);
         Boolean isSlotEmpty = parkingTicket.removeVehicleFromParking(parkingSlot);
@@ -56,12 +64,20 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public String status() {
 
+        String doesParkingExists = validateParkingSpace();
+        if(doesParkingExists != null)
+            return doesParkingExists;
+
         String status = getParkingDetails(InfoType.STATUS, null);
         return status;
     }
 
     @Override
     public String getCarsRegNumOrSlotWithColor(InfoType infoType, String color) {
+
+        String doesParkingExists = validateParkingSpace();
+        if(doesParkingExists != null)
+            return doesParkingExists;
 
         String cars = getParkingDetails(infoType, color);
         return cars;
@@ -70,6 +86,10 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public String getSlotForCarWithRegNum(String regNum) {
 
+        String doesParkingExists = validateParkingSpace();
+        if(doesParkingExists != null)
+            return doesParkingExists;
+
         String slots = getParkingDetails(InfoType.PARKING_SLOT_OF_CAR, regNum);
         return slots;
     }
@@ -77,13 +97,14 @@ public class ParkingServiceImpl implements ParkingService {
     private String getParkingDetails(InfoType infoType, String miscInfo) {
 
         Map<ParkingSlot, Vehicle> parkingSlotVehicleMap = parkingTicket.getParkingSlotVehicleMap();
-        if (parkingSlotVehicleMap.size() == 0)
-            return "Not found";
+        if(infoType != InfoType.STATUS) {
+            if (parkingSlotVehicleMap.size() == 0)
+                return "Not found";
+        }
 
         StringBuilder status = new StringBuilder();
-
         if (infoType == InfoType.STATUS) {
-            status.append("Slot No.\tRegistration No\tColour\n");
+            status.append("Slot No.\tRegistration No\tColour \n");
         }
 
         for (Map.Entry<Integer, ParkingSlot> vehicleParkingSlotEntry : parkingSpace.getIdToSlotMap().entrySet()) {
@@ -117,5 +138,11 @@ public class ParkingServiceImpl implements ParkingService {
             response = status.substring(0, status.length() - 2);
 
         return response;
+    }
+
+    public String validateParkingSpace() {
+        if(parkingSpace.getIdToSlotMap().size() < 1)
+            return "No Parking lot created";
+        return null;
     }
 }
