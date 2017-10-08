@@ -4,6 +4,8 @@ import java.util.*;
 
 /**
  * Created by prateekgupta on 07/10/17.
+ *
+ * Details about all the parking slot.
  */
 public class ParkingSpace {
 

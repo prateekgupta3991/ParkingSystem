@@ -10,6 +10,14 @@ import java.util.Map;
 
 /**
  * Created by prateekgupta on 07/10/17.
+ *
+ * createParkingLot - for creating the parking lot.
+ * issueTicket -  when a new vehicle arrives for parking.
+ * leaveParking - for the exit of vehicle.
+ * status - current status of parking slot.
+ * getCarsRegNumOrSlotWithColor - gets the registration number of car or its
+ *                                  corresponding parking slot based on color.
+ * getSlotForCarWithRegNum - gets the parking slot of a car with a specific registration number.
  */
 public class ParkingServiceImpl implements ParkingService {
 

@@ -5,6 +5,8 @@ import java.util.Map;
 
 /**
  * Created by prateekgupta on 07/10/17.
+ *
+ * Details about status of parking slots and the vehicle and the corresponding parking slot.
  */
 public class ParkingTicket {
 

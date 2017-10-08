@@ -2,6 +2,8 @@ package gojek.entities;
 
 /**
  * Created by prateekgupta on 07/10/17.
+ *
+ * Details about the parking slot info.
  */
 public class ParkingSlot {
 
